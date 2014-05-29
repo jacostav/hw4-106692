@@ -36,42 +36,47 @@ import org.apache.uima.cas.CAS;
 import org.apache.uima.util.XMLInputSource;
 
 public class VectorSpaceRetrieval {
-	
-	public static void main(String [] args) 
-			throws Exception {
-			
+
+	public static void main(String[] args) throws Exception {
+
 		String sLine;
-		long startTime=System.currentTimeMillis();
-		
-		URL descUrl = VectorSpaceRetrieval.class.getResource("/descriptors/retrievalsystem/VectorSpaceRetrieval.xml");
-	   if (descUrl == null) {
-	      throw new IllegalArgumentException("Error opening VectorSpaceRetrieval.xml");
-	   }
-		// create AnalysisEngine		
+		long startTime = System.currentTimeMillis();
+
+		URL descUrl = VectorSpaceRetrieval.class
+				.getResource("/descriptors/retrievalsystem/VectorSpaceRetrieval.xml");
+		if (descUrl == null) {
+			throw new IllegalArgumentException(
+					"Error opening VectorSpaceRetrieval.xml");
+		}
+		// create AnalysisEngine
 		XMLInputSource input = new XMLInputSource(descUrl);
-		AnalysisEngineDescription desc = UIMAFramework.getXMLParser().parseAnalysisEngineDescription(input);
-		AnalysisEngine anAnalysisEngine = UIMAFramework.produceAnalysisEngine(desc);
+		AnalysisEngineDescription desc = UIMAFramework.getXMLParser()
+				.parseAnalysisEngineDescription(input);
+		AnalysisEngine anAnalysisEngine = UIMAFramework
+				.produceAnalysisEngine(desc);
 		CAS aCas = anAnalysisEngine.newCAS();
 
-	  URL docUrl = VectorSpaceRetrieval.class.getResource("/data/documents.txt");
-    if (docUrl == null) {
-       throw new IllegalArgumentException("Error opening data/documents.txt");
-    }
-		BufferedReader br = new BufferedReader(new InputStreamReader(docUrl.openStream()));
-		while ((sLine = br.readLine()) != null)   {
+		URL docUrl = VectorSpaceRetrieval.class
+				.getResource("/data/documents.txt");
+		if (docUrl == null) {
+			throw new IllegalArgumentException(
+					"Error opening data/documents.txt");
+		}
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				docUrl.openStream()));
+		while ((sLine = br.readLine()) != null) {
 			aCas.setDocumentText(sLine);
 			anAnalysisEngine.process(aCas);
 			aCas.reset();
 		}
 		br.close();
-		br=null;
+		br = null;
 		anAnalysisEngine.collectionProcessComplete();
-		anAnalysisEngine.destroy();	
-		long endTime=System.currentTimeMillis();
-		
-		double totalTime=(endTime-startTime)/1000.0;
-		System.out.println("Total time taken: "+totalTime);
-		
+		anAnalysisEngine.destroy();
+		long endTime = System.currentTimeMillis();
+
+		double totalTime = (endTime - startTime) / 1000.0;
+		System.out.println("Total time taken: " + totalTime);
 
 	}
 
